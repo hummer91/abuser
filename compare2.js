@@ -118,9 +118,6 @@ const main = async () => {
 		await inputDataArray.push(inputData);
 	}
 
-	// 출력 CSV 파일 경로
-	const outputFilePath =
-		"ex" + process.argv[2] + "/output" + process.argv[3] + ".csv";
 	let output_count = 1;
 	for (let i = 0; i <= numFiles - 1; i++) {
 		inputData1 = inputDataArray[i];
@@ -133,14 +130,22 @@ const main = async () => {
 			const totalRows = totalRows1 + totalRows2;
 			const matchedRows = matchedData.length;
 			console.log(matchedRows);
+			// if (output_count == 6) {
+			// 	console.log(inputData2);
+			// 	return;
+			// }
+			if (matchedRows < 1) {
+			} else {
+				const ratio = (matchedRows / totalRows) * 100;
+				matchedData.push({ USER: ratio });
+				await writeCSV(
+					`ex${process.argv[2]}/output_${output_count}.csv`,
+					matchedData
+				);
+				output_count++;
+			}
+
 			// 비율 계산
-			const ratio = (matchedRows / totalRows) * 100;
-			matchedData.push({ USER: ratio });
-			await writeCSV(
-				`ex${process.argv[2]}/output_${output_count}.csv`,
-				matchedData
-			);
-			output_count++;
 		}
 	}
 };
